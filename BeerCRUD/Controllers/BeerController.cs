@@ -30,6 +30,17 @@ public class BeerController : ControllerBase
        return beerList;
     }
 
+    [HttpGet]
+    public async Task<IEnumerable<BeerResponseDTO>> SearchBeers([FromQuery]string input)
+    {
+        var beerList= _dbContext.Beers.Where(i=>i.Name.ToLower().Contains(input.ToLower())).Select(i=>new BeerResponseDTO()
+        {
+            Name   = i.Name,
+            Rating = i.AvgRating,
+            Type = i.Type
+        });
+        return beerList;
+    }
     [HttpPost]
     public async Task<IActionResult> AddBeerToList([FromBody] BeerRequestDTO beerRequestDto)
     {
